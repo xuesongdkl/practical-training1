@@ -69,11 +69,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IndexController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="IndexController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/User/IndexController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.580646">
-              <caret line="107" column="29" selection-start-line="107" selection-start-column="29" selection-end-line="107" selection-end-column="29" />
+            <state vertical-scroll-proportion="0.16296296">
+              <caret line="85" column="42" selection-start-line="85" selection-start-column="42" selection-end-line="85" selection-end-column="42" />
               <folding>
                 <element signature="e#45#73#0#PHP" expanded="true" />
                 <element signature="e#234#1618#0#PHP" expanded="false" />
@@ -82,12 +82,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="center.blade.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="center.blade.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/user/center.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.40185186">
-              <caret line="15" column="21" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
-              <folding />
+            <state vertical-scroll-proportion="-9.83871">
+              <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
+              <folding>
+                <marker date="1554638339246" expanded="true" signature="541:673" placeholder="/*...*/" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -118,8 +120,8 @@
         <option value="$PROJECT_DIR$/app/Model/UserModel.php" />
         <option value="$PROJECT_DIR$/resources/views/user/login.blade.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/User/IndexController.php" />
         <option value="$PROJECT_DIR$/resources/views/user/center.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/User/IndexController.php" />
       </list>
     </option>
   </component>
@@ -572,14 +574,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Middleware/CheckApiRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="17.35484">
-          <caret line="66" column="0" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/user/login.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.096774">
@@ -604,22 +598,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/User/IndexController.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/user/center.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.580646">
-          <caret line="107" column="29" selection-start-line="107" selection-start-column="29" selection-end-line="107" selection-end-column="29" />
+        <state vertical-scroll-proportion="-9.83871">
+          <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
           <folding>
-            <element signature="e#45#73#0#PHP" expanded="true" />
-            <element signature="e#234#1618#0#PHP" expanded="false" />
+            <marker date="1554638339246" expanded="true" signature="541:673" placeholder="/*...*/" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/user/center.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Middleware/CheckApiRequest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.40185186">
-          <caret line="15" column="21" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
+        <state vertical-scroll-proportion="17.35484">
+          <caret line="66" column="0" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/User/IndexController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.16296296">
+          <caret line="85" column="42" selection-start-line="85" selection-start-column="42" selection-end-line="85" selection-end-column="42" />
+          <folding>
+            <element signature="e#45#73#0#PHP" expanded="true" />
+            <element signature="e#234#1618#0#PHP" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
