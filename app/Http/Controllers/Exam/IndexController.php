@@ -8,7 +8,10 @@ use App\Http\Controllers\Controller;
 class IndexController extends Controller
 {
    public function index(){
-       echo 'hello world';
-       exit;
+       return [
+           'status'  =>   1000,
+           'msg'     =>   'success',
+           'data'    =>   []
+       ];
    }
 }

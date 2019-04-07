@@ -23,28 +23,78 @@ class CheckApiRequest
 
         //访问次数限制
         $num=$this->_checkApiAccessCount();
-        if($num['status']!=1000){
+
+        if($num['status']==1000){
+            //验证签名
+            $data=$this->_checkClientSign($request);
+//            var_dump($data);die;
+
+            //判断签名是否正确
+            if($data['status']==1000){
+
+                $response=$next($request);
+                //后置操作 对返回的数据进行加密
+//                echo "</pre>";
+                $data=$response->original;
+//                var_dump($data);
+                $api_response=[];
+                //使用对称加密对数据进行加密处理
+                $api_response['data']=$this->_encrypt($data);
+                //生成签名，返回给客户端
+                $api_response['sign']=$this->_createServerSign($data);
+                return response($api_response);
+
+            }else{
+                return response($data);
+            }
+        }else{
             return response($num);
         }
-
-
-        //验证签名
-        $data=$this->_checkClientSign($request);
-
-        //判断签名是否正确
-        if($data['status']==1000){
-            return $next($request);
-        }else{
-            return response($data);
-        }
-
+//        //把解密的数据传递到控制器
+////        $request->request->replace($this->_api_data);
     }
+
+    //服务端返回的时候 返回一个签名
+    private function _createServerSign($data){
+        $app_id=$this->_getAppId();
+//        var_dump($app_id);die;
+        $all_app=$this->_getAllAppIdKey();
+        //排序
+        ksort($data);
+        //变成a=1&b=2
+        $sign_str=http_build_query($data).'&app_key='.$all_app[$app_id];
+//        echo $sign_str;
+
+        return md5($sign_str);
+    }
+    //加密
+    private function _encrypt($data){
+
+        if(!empty($data)){
+            $enc_data=openssl_encrypt(json_encode($data),'AES-256-CBC','dkllove',false,'0614668812076688');
+            return $enc_data;
+
+//            $this->_api_data=json_decode($dec_data,true);
+        }
+    }
+    //获取系统现有的appid和key
+    private function _getAllAppIdKey(){
+        //从数据库获得对应的数据
+        return [
+            md5(0614) =>  md5('12070614'),
+            md5(2) =>  md5('2222222'),
+            md5(3) =>  md5('3333333'),
+        ];
+    }
+
     //解密
     private function _decrypt($request){
         $data=$request->post('data');
+
         if(!empty($data)){
             $dec_data=openssl_decrypt($data,'AES-256-CBC','dkllove',false,'0614668812076688');
             $this->_api_data=json_decode($dec_data,true);
+//            var_dump(json_decode($dec_data,true));
         }
     }
 
@@ -60,12 +110,11 @@ class CheckApiRequest
                     'data'     =>   []
                  ];
             }
-            var_dump($this->_api_data);
-            //生成服务端签名
+//            var_dump($this->_api_data);
             ksort($this->_api_data);
             //变成字符串 拼接app_key
             $server_str=http_build_query($this->_api_data).'&app_key='.$map[$this->_api_data['app_id']];
-            echo "<pre>";echo $server_str;echo "</pre>";
+//            var_dump($server_str);die;
             if(md5($server_str)!=$request['sign']){
                 return [
                     'status'   =>   2,
@@ -105,7 +154,7 @@ class CheckApiRequest
             return ['status'=>1000];
         }else{
             //判断是否超过30min
-            if(time()-$join_black_name>=30 * 60){
+            if(time()-$join_black_name>=10 ){
                 Redis::zRemove($black_key,$app_id);
                 $this->_addAppIdAccessCount();
             }else{
@@ -125,7 +174,7 @@ class CheckApiRequest
             Redis::expire($this->_getAppId(),60);
         }
         //大于等于100 加入黑名单
-        if($count>=100){
+        if($count>=3){
             Redis::zAdd($this->_black_key,time(),$this->_getAppId());
             Redis::del($this->_getAppId());
             return [

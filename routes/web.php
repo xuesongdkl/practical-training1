@@ -15,5 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/test','Exam\IndexController@index');
-//    ->middelware('check.api.request');
+Route::post('/test','Exam\IndexController@index')->middleware('check.api.request');
