@@ -21,5 +21,5 @@ Route::post('/test','Exam\IndexController@index')->middleware('check.api.request
 Route::post('/app/login','User\IndexController@appLogin');
 
 Route::get('/userlogin','User\IndexController@login');
-//Route::post('/userlogin','User\IndexController@dologin');
+Route::post('/userlogin','User\IndexController@doLogin');
 
