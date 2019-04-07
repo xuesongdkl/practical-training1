@@ -37,9 +37,9 @@ class IndexController extends Controller
         Redis::expire($ktoken,3600*24);
         if($user_data){
             $token = substr(md5(time().mt_rand(1,99999)),10,10);
-            $redis_key_web_token='token:u:'.$user_data->uid;
-            Redis::del($redis_key_web_token);
-            Redis::set($redis_key_web_token,'app',$token);
+            $redis_key_app_token='token:u:'.$user_data->uid;
+            Redis::del($redis_key_app_token);
+            Redis::set($redis_key_app_token,$token);
             $res_data=[
                 'errcode'=>0,
                 'msg'=>'登陆成功',
