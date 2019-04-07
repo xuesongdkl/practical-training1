@@ -80,7 +80,7 @@ class IndexController extends Controller
             setcookie('token',$token,time()+86400,'/','',false,true);
             $redis_key_web_token='str:u:token:'.$userInfo->uid;
             Redis::del($redis_key_web_token);
-            Redis::set($redis_key_web_token,'web',$token);
+            Redis::set($redis_key_web_token,$token);
             Redis::expire($redis_key_web_token,3600*24);
             echo "登录成功";
             header("refresh:1;url=/center");
