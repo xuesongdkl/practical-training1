@@ -1,4 +1,4 @@
-<form>
+<form method="post" action="/userlogin">
     <div class="form-group">
         <label for="exampleInputEmail1">账号</label>
         <input type="text" name="u_name" placeholder="请输入账号">

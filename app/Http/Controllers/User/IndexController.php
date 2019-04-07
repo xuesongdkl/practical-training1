@@ -33,9 +33,13 @@ class IndexController extends Controller
         $user_data=UserModel::where($user_where)->first();
         $ktoken='token:u:'.$user_data['uid'];
         $token=$token=str_random(32);
-        Redis::hSet($ktoken,'app:token',$token);
+        Redis::set($ktoken,'app:token',$token);
         Redis::expire($ktoken,3600*24);
         if($user_data){
+            $token = substr(md5(time().mt_rand(1,99999)),10,10);
+            $redis_key_web_token='token:u:'.$user_data->uid;
+            Redis::del($redis_key_web_token);
+            Redis::set($redis_key_web_token,'app',$token);
             $res_data=[
                 'errcode'=>0,
                 'msg'=>'登陆成功',
@@ -70,14 +74,44 @@ class IndexController extends Controller
             'u_name' => $u_name
         ];
         $userInfo=UserModel::where($where)->first();
-        $ktoken='token:uid:'.$userInfo['uid'];
-        $token=$token=str_random(32);
-        Redis::hSet($ktoken,'web:token',$token);
-        Redis::expire($ktoken,3600*24);
         if($userInfo){
+            $token = substr(md5(time().mt_rand(1,99999)),10,10);
+            setcookie('uid',$userInfo->uid,time()+86400,'/','xuesong.shansister.com',false,true);
+            setcookie('token',$token,time()+86400,'/','',false,true);
+            $redis_key_web_token='str:u:token:'.$userInfo->uid;
+            Redis::del($redis_key_web_token);
+            Redis::set($redis_key_web_token,'web',$token);
+            Redis::expire($redis_key_web_token,3600*24);
             echo "登录成功";
+            header("refresh:1;url=/center?uid=".$userInfo->uid);
         }else{
             echo "账号或密码错误";
+        }
+    }
+
+    //个人中心
+    public function center(Request $request){
+        if(empty($_COOKIE['uid'])) {
+            echo "请先登录";
+        }
+        $uid=$_COOKIE['uid'];
+        $token=$_COOKIE['token'];
+        $data=[
+            'uid'   => $uid,
+            'token' => $token
+        ];
+        return view('user.center',$data);
+    }
+
+    public function center1(Request $request){
+        $token = $_POST['token'];
+        $uid = $_POST['uid'];
+        $redis_key_web_token='str:u:token:'.$uid;
+        $new_token = Redis::get($redis_key_web_token);
+        if($token==$new_token){
+            return 1;
+        }else{
+            return 2;
         }
     }
 }

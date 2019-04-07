@@ -22,4 +22,6 @@ Route::post('/app/login','User\IndexController@appLogin');
 
 Route::get('/userlogin','User\IndexController@login');
 Route::post('/userlogin','User\IndexController@doLogin');
+Route::get('/center','User\IndexController@center');
+Route::post('/center1','User\IndexController@center1');
 
