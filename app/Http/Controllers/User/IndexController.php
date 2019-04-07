@@ -83,7 +83,7 @@ class IndexController extends Controller
             Redis::set($redis_key_web_token,'web',$token);
             Redis::expire($redis_key_web_token,3600*24);
             echo "登录成功";
-            header("refresh:1;url=/center?uid=".$userInfo->uid);
+            header("refresh:1;url=/center");
         }else{
             echo "账号或密码错误";
         }
