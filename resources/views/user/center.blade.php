@@ -11,21 +11,21 @@
 //        alert(111);
         var token = $('#token').val();
         var uid = $('#id').val();
-        var info = function(){
+        var data = function(){
             $.post(
                 'http://xuesong.shansister.com/center1',
                 {token:token,uid:uid},
                 function(data){
-//                    alert(data)
-                    if(data==2){
+                    alert(data)
+                    /*if(data==2){
                         alert('此账号已有其他用户登录');
                         location.href='/userlogin';
-                    }
+                    }*/
                 }
             );
         };
         var s = setInterval(function(){
-            info();
+            data();
         },1000*3)
     })
 </script>
