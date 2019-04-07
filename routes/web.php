@@ -17,7 +17,9 @@ Route::get('/', function () {
 
 Route::post('/test','Exam\IndexController@index')->middleware('check.api.request');
 
-//登录
+//移动端登录
+Route::post('/app/login','User\IndexController@appLogin');
+
 Route::get('/userlogin','User\IndexController@login');
 //Route::post('/userlogin','User\IndexController@dologin');
 

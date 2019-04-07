@@ -4,6 +4,8 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\UserModel;
+use Illuminate\Support\Facades\Redis;
 
 class IndexController extends Controller
 {
