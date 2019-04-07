@@ -69,11 +69,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IndexController.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="IndexController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/User/IndexController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.9111111">
-              <caret line="82" column="43" selection-start-line="82" selection-start-column="43" selection-end-line="82" selection-end-column="43" />
+            <state vertical-scroll-proportion="-9.580646">
+              <caret line="107" column="29" selection-start-line="107" selection-start-column="29" selection-end-line="107" selection-end-column="29" />
               <folding>
                 <element signature="e#45#73#0#PHP" expanded="true" />
                 <element signature="e#234#1618#0#PHP" expanded="false" />
@@ -82,11 +82,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="center.blade.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="center.blade.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/user/center.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.387097">
-              <caret line="3" column="42" selection-start-line="3" selection-start-column="38" selection-end-line="3" selection-end-column="42" />
+            <state vertical-scroll-proportion="0.40185186">
+              <caret line="15" column="21" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -118,8 +118,8 @@
         <option value="$PROJECT_DIR$/app/Model/UserModel.php" />
         <option value="$PROJECT_DIR$/resources/views/user/login.blade.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
-        <option value="$PROJECT_DIR$/resources/views/user/center.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/User/IndexController.php" />
+        <option value="$PROJECT_DIR$/resources/views/user/center.blade.php" />
       </list>
     </option>
   </component>
@@ -588,14 +588,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/user/center.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.387097">
-          <caret line="3" column="42" selection-start-line="3" selection-start-column="38" selection-end-line="3" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Middleware/VerifyCsrfToken.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7314815">
@@ -614,12 +606,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/User/IndexController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9111111">
-          <caret line="82" column="43" selection-start-line="82" selection-start-column="43" selection-end-line="82" selection-end-column="43" />
+        <state vertical-scroll-proportion="-9.580646">
+          <caret line="107" column="29" selection-start-line="107" selection-start-column="29" selection-end-line="107" selection-end-column="29" />
           <folding>
             <element signature="e#45#73#0#PHP" expanded="true" />
             <element signature="e#234#1618#0#PHP" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/user/center.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40185186">
+          <caret line="15" column="21" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>
