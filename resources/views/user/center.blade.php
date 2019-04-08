@@ -14,7 +14,7 @@
     <tr>
         <td>{{$v->uid}}</td>
         <td>{{$v->u_name}}</td>
-        <td>{{date($v->add_time,'Y-m-d H:i:s')}}</td>
+        <td>{{date('Y-m-d H:i:s',$v->add_time)}}</td>
         <td>
             @if($v->is_online==1)
             在线
