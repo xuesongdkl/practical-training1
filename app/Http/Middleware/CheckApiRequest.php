@@ -19,7 +19,8 @@ class CheckApiRequest
     public function handle($request, Closure $next)
     {
         //先获取接口的数据，需要先解密
-       $this->_decrypt($request);
+//        $this->_decrypt($request);
+       $this->_RsaDecrypt($request);
 
         //访问次数限制
         $num=$this->_checkApiAccessCount();
@@ -28,7 +29,8 @@ class CheckApiRequest
             //验证签名
             $data=$this->_checkClientSign($request);
 //            var_dump($data);die;
-
+            //把解密的数据传递到控制器
+            $request->request->replace($this->_api_data);
             //判断签名是否正确
             if($data['status']==1000){
 
@@ -36,10 +38,12 @@ class CheckApiRequest
                 //后置操作 对返回的数据进行加密
 //                echo "</pre>";
                 $data=$response->original;
-//                var_dump($data);
+//                var_dump($data);die;
                 $api_response=[];
                 //使用对称加密对数据进行加密处理
-                $api_response['data']=$this->_encrypt($data);
+//                $api_response['data']=$this->_encrypt($data);
+                $api_response['data']=$this->_RsaEncrypt($data);
+                //var_dump($api_response['data']);die;
                 //生成签名，返回给客户端
                 $api_response['sign']=$this->_createServerSign($data);
                 return response($api_response);
@@ -50,8 +54,6 @@ class CheckApiRequest
         }else{
             return response($num);
         }
-//        //把解密的数据传递到控制器
-////        $request->request->replace($this->_api_data);
     }
 
     //服务端返回的时候 返回一个签名
@@ -68,15 +70,30 @@ class CheckApiRequest
         return md5($sign_str);
     }
     //加密
-    private function _encrypt($data){
-
+//    private function _encrypt($data){
+//
+//        if(!empty($data)){
+//            $enc_data=openssl_encrypt(json_encode($data),'AES-256-CBC','dkllove',false,'0614668812076688');
+//            return $enc_data;
+//
+////            $this->_api_data=json_decode($dec_data,true);
+//        }
+//    }
+    //用非对称方法进行加密
+    private function _RsaEncrypt($data){
         if(!empty($data)){
-            $enc_data=openssl_encrypt(json_encode($data),'AES-256-CBC','dkllove',false,'0614668812076688');
-            return $enc_data;
-
-//            $this->_api_data=json_decode($dec_data,true);
+            $i=0;
+            $all='';
+            $str=json_encode($data);
+            while($sub_str=substr($str,$i,117)){
+                openssl_private_encrypt($sub_str,$enc_data,file_get_contents('./private.key'),OPENSSL_PKCS1_PADDING);
+                $all.=base64_encode($enc_data);
+                $i+=117;
+            }
+            return $all;
         }
     }
+
     //获取系统现有的appid和key
     private function _getAllAppIdKey(){
         //从数据库获得对应的数据
@@ -98,8 +115,25 @@ class CheckApiRequest
         }
     }
 
+    //使用非对称进行解密
+    private function _RsaDecrypt($request){
+        $data=$request->post('data');
+        if(!empty($data)){
+            $i=0;
+            $all='';
+            while($sub_str=substr($data,$i,172)){
+                $decode_data=base64_decode($sub_str);
+                openssl_private_decrypt($decode_data,$dec_data,file_get_contents('./private.key'),OPENSSL_PKCS1_PADDING);
+                $all.=$dec_data;
+                $i+=172;
+            }
+            $this->_api_data=json_decode($all,true);
+        }
+    }
+
     //验证签名
     private function _checkClientSign($request){
+//        var_dump($this->_api_data);die;
         if(!empty($this->_api_data)){
             //获取当前所有的app_id和key
             $map=$this->_getAppIdKey();
@@ -110,7 +144,7 @@ class CheckApiRequest
                     'data'     =>   []
                  ];
             }
-//            var_dump($this->_api_data);
+//            var_dump($this->_api_data);die;
             ksort($this->_api_data);
             //变成字符串 拼接app_key
             $server_str=http_build_query($this->_api_data).'&app_key='.$map[$this->_api_data['app_id']];
@@ -137,7 +171,9 @@ class CheckApiRequest
     /*
      * 获取当前调用接口的appid**/
     private function _getAppId(){
-        return $this->_api_data['app_id'];
+        if(!empty($this->_api_data['app_id'])){
+            return $this->_api_data['app_id'];
+        }
     }
 
     //接口防刷

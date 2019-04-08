@@ -31,15 +31,14 @@ class IndexController extends Controller
             'u_name'  =>  $u_name
         ];
         $user_data=UserModel::where($user_where)->first();
-        $ktoken='token:u:'.$user_data['uid'];
-        $token=$token=str_random(32);
-        Redis::set($ktoken,'app:token',$token);
-        Redis::expire($ktoken,3600*24);
         if($user_data){
             $token = substr(md5(time().mt_rand(1,99999)),10,10);
-            $redis_key_app_token='token:u:'.$user_data->uid;
+            setcookie('uid',$user_data->uid,time()+86400,'/','xuesong.shansister.com',false,true);
+            setcookie('token',$token,time()+86400,'/','',false,true);
+            $redis_key_app_token='app:str:u:token:'.$user_data->uid;
             Redis::del($redis_key_app_token);
             Redis::set($redis_key_app_token,$token);
+            Redis::expire($redis_key_app_token,3600*24);
             $res_data=[
                 'errcode'=>0,
                 'msg'=>'登陆成功',
@@ -54,6 +53,28 @@ class IndexController extends Controller
             ];
         }
         return $res_data;
+    }
+
+    //
+    public function center2(){
+        $uid=$_POST['uid'];
+        $token=$_POST['token'];
+        $ktoken='token:u:'.$uid;
+        $redis_token=Redis::get($ktoken,'app:token');
+        if($token==$redis_token){
+            $user_info=UserModel::where(['uid'=>$uid])->first();
+            $data=[
+                'errcode'=>0,
+                'msg'=>'ok',
+                'u_name'=>$user_info['u_name'],
+            ];
+        }else{
+            $data=[
+                'errcode'=>5001,
+                'msg'=>'no'
+            ];
+        }
+        return $data;
     }
 
     //PC端登录页面
@@ -78,7 +99,7 @@ class IndexController extends Controller
             $token = substr(md5(time().mt_rand(1,99999)),10,10);
             setcookie('uid',$userInfo->uid,time()+86400,'/','xuesong.shansister.com',false,true);
             setcookie('token',$token,time()+86400,'/','',false,true);
-            $redis_key_web_token='str:u:token:'.$userInfo->uid;
+            $redis_key_web_token='web:str:u:token:'.$userInfo->uid;
             Redis::del($redis_key_web_token);
             Redis::set($redis_key_web_token,$token);
             Redis::expire($redis_key_web_token,3600*24);
@@ -106,7 +127,7 @@ class IndexController extends Controller
     public function center1(Request $request){
         $token = $_POST['token'];
         $uid = $_POST['uid'];
-        $redis_key_web_token='str:u:token:'.$uid;
+        $redis_key_web_token='web:str:u:token:'.$uid;
         $new_token = Redis::get($redis_key_web_token);
         if($token==$new_token){
             return 1;
@@ -114,4 +135,6 @@ class IndexController extends Controller
             return 2;
         }
     }
+
+
 }
