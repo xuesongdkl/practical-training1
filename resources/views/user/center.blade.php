@@ -23,6 +23,7 @@
             @endif
         </td>
     </tr>
+    @endforeach
 </table>
 
 
