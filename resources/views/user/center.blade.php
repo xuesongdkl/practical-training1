@@ -3,6 +3,27 @@
 <input type="hidden" id="token" value="{{$token}}">
 <input type="hidden" id="id" value="{{$uid}}">
 
+<table>
+    <tr>
+        <td>ID</td>
+        <td>账号</td>
+        <td>添加时间</td>
+        <td>是否在线</td>
+    </tr>
+    @foreach($data as $k => $v)
+    <tr>
+        <td>{{$v->uid}}</td>
+        <td>{{$v->u_name}}</td>
+        <td>{{date($v->add_time,'Y-m-d H:i:s')}}</td>
+        <td>
+            @if($v->is_online==1)
+            在线
+            @elseif
+            未登录
+            @endif
+        </td>
+    </tr>
+</table>
 
 
 <script src="{{URL::asset('/js/jquery-1.12.4.min.js')}}"></script>

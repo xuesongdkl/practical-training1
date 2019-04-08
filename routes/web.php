@@ -21,7 +21,7 @@ Route::post('/test','Exam\IndexController@index')->middleware('check.api.request
 Route::post('/app/login','User\IndexController@appLogin');
 Route::post('/center2','User\IndexController@center2');
 
-
+//PC端登录
 Route::get('/userlogin','User\IndexController@login');
 Route::post('/userlogin','User\IndexController@doLogin');
 Route::get('/center','User\IndexController@center');

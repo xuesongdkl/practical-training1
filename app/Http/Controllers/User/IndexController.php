@@ -55,7 +55,6 @@ class IndexController extends Controller
         return $res_data;
     }
 
-    //
     public function center2(){
         $uid=$_POST['uid'];
         $token=$_POST['token'];
@@ -103,6 +102,7 @@ class IndexController extends Controller
             Redis::del($redis_key_web_token);
             Redis::set($redis_key_web_token,$token);
             Redis::expire($redis_key_web_token,3600*24);
+            UserModel::where($where)->update(['is_online' => 1]);
             echo "登录成功";
             header("refresh:1;url=/center");
         }else{
@@ -117,9 +117,11 @@ class IndexController extends Controller
         }
         $uid=$_COOKIE['uid'];
         $token=$_COOKIE['token'];
+        $userInfo=UserModel::all();
         $data=[
-            'uid'   => $uid,
-            'token' => $token
+            'uid'       => $uid,
+            'token'     => $token,
+            'data'      => $userInfo
         ];
         return view('user.center',$data);
     }
@@ -135,6 +137,5 @@ class IndexController extends Controller
             return 2;
         }
     }
-
 
 }
