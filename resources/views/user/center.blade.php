@@ -3,7 +3,7 @@
 <input type="hidden" id="token" value="{{$token}}">
 <input type="hidden" id="id" value="{{$uid}}">
 
-<table>
+<table border="1">
     <tr>
         <td>ID</td>
         <td>账号</td>
