@@ -18,7 +18,7 @@
         <td>
             @if($v->is_online==1)
             在线
-            @elseif
+            @elseif($v->is_online==2)
             未登录
             @endif
         </td>
