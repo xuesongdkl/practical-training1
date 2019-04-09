@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/test','Exam\IndexController@index')->middleware('check.api.request');
+Route::any('/test','Exam\IndexController@index')->middleware('check.api.request');
 
 //移动端登录
 Route::post('/app/login','User\IndexController@appLogin');
@@ -27,5 +27,5 @@ Route::post('/userlogin','User\IndexController@doLogin');
 Route::get('/center','User\IndexController@center');
 Route::post('/center1','User\IndexController@center1');
 
-Route::get('/test','Test\IndexController@index');
+Route::any('/test/upload','Exam\IndexController@uploadImg')->middleware('check.api.request');
 

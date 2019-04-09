@@ -20,12 +20,13 @@ class CheckApiRequest
     {
         //先获取接口的数据，需要先解密
 //        $this->_decrypt($request);
-       $this->_RsaDecrypt($request);
 
+        $this->_RsaDecrypt($request);
         //访问次数限制
         $num=$this->_checkApiAccessCount();
 
         if($num['status']==1000){
+
             //验证签名
             $data=$this->_checkClientSign($request);
 //            var_dump($data);die;
@@ -33,21 +34,16 @@ class CheckApiRequest
             $request->request->replace($this->_api_data);
             //判断签名是否正确
             if($data['status']==1000){
-
                 $response=$next($request);
                 //后置操作 对返回的数据进行加密
-//                echo "</pre>";
                 $data=$response->original;
-//                var_dump($data);die;
                 $api_response=[];
                 //使用对称加密对数据进行加密处理
 //                $api_response['data']=$this->_encrypt($data);
                 $api_response['data']=$this->_RsaEncrypt($data);
-                //var_dump($api_response['data']);die;
                 //生成签名，返回给客户端
                 $api_response['sign']=$this->_createServerSign($data);
                 return response($api_response);
-
             }else{
                 return response($data);
             }
@@ -61,12 +57,13 @@ class CheckApiRequest
         $app_id=$this->_getAppId();
 //        var_dump($app_id);die;
         $all_app=$this->_getAllAppIdKey();
+        if(!is_array($data)){
+            $data=(array)$data;
+        }
         //排序
         ksort($data);
         //变成a=1&b=2
         $sign_str=http_build_query($data).'&app_key='.$all_app[$app_id];
-//        echo $sign_str;
-
         return md5($sign_str);
     }
     //加密
@@ -133,7 +130,6 @@ class CheckApiRequest
 
     //验证签名
     private function _checkClientSign($request){
-//        var_dump($this->_api_data);die;
         if(!empty($this->_api_data)){
             //获取当前所有的app_id和key
             $map=$this->_getAppIdKey();
@@ -180,7 +176,6 @@ class CheckApiRequest
     private function _checkApiAccessCount(){
         //获取appid
         $app_id=$this->_getAppId();
-//        echo $app_id;die;
         $black_key=$this->_black_key;
         //判断是否在黑名单中
         $join_black_name=Redis::zScore($black_key,$app_id);
