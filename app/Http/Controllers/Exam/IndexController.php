@@ -64,4 +64,117 @@ class IndexController extends Controller
             ];
         }
    }
+
+    //得到图片验证码
+    public function getVcodeUrl(){
+        session_start();
+        $sid=session_id();
+        $url='http://vm.1807api.com/showvcode/'.$sid;
+        $data=[
+            'url'   => $url,
+            'sid'   => $sid
+        ];
+        return [
+            'status'  =>   1000,
+            'msg'     =>   'success',
+            'data'    =>   $data
+        ];
+    }
+
+    //展示图片验证码
+    public function showVcode(Request $request,$sid=''){
+        session_id($sid);
+        session_start();
+        $rand=$this->randnum();
+        //设置content-type
+        header("Content-type: image/png");
+
+        //创建一个100*30的画布
+        $im = imagecreatetruecolor(130, 30);
+
+        //创建几个颜色
+        $white = imagecolorallocate($im, 30, 144, 255);
+        $black = imagecolorallocate($im, 0, 0, 0);
+        //填充画布的背景色
+        imagefilledrectangle($im, 0, 0, 399, 29, $white);
+
+        //字体文件
+        $font = '/www/1807month4/calibri.ttf';
+        //限制随机数
+        $i=0;
+        $len=strlen($rand);
+        while($i<$len){
+            //判断$rand[$i]是否为数字，若是，则让其旋转一定的角度
+            if(is_numeric($rand[$i])){
+                imagettftext($im, 20, rand(-30,30) , 10+20*$i, 20, $black, $font, $rand[$i]);
+            }else{
+                imagettftext($im, 20, 0 , 10+20*$i, 20, $black, $font, $rand[$i]);
+            }
+            $i++;
+        }
+        //与imagejpeg（）相比，使用imagepng（）可以使文本更清晰。
+        imagepng($im);
+        imagedestroy($im);
+        exit();
+    }
+
+    public function randnum(){
+        $type=rand(1,5);
+        $a=rand(1,9);
+        $b=rand(1,9);
+        $c='';
+        $text='';
+        if($type==1){
+            $rand=rand(1000,9999);
+            $c=''. $rand;
+            $text =$rand;
+        }else if($type==2){
+            $c="$a+$b=?";
+            $text=$a+$b;
+        }else if($type==3){
+            if($a>$b){
+                $c="$a-$b=?";
+                $text=$a-$b;
+            }else if($a==$b){
+                $d=$a+rand(1,3);
+                $c="$d-$b=?";
+                $text=$d-$b;
+            }else{
+                $c="$b-$a=?";
+                $text=$b-$a;
+            }
+        }else if($type==4){
+            $c="$a*$b=?";
+            $text=$a*$b;
+        }else if($type==5){
+            $d=$a*$b;
+            $c="$d/$a=?";
+            $text=$b;
+        }
+        $_SESSION['vcode']=$text;
+        return $c;
+    }
+
+    //验证
+    public function verify(Request $request){
+        header("Access-Control-Allow-Origin: http://vm.test.com");
+        header("Access-Control-Allow-Method:GET,POST");
+        $vcode=$request->post('vcode');
+        $sid=$request->post('sid');
+        session_id($sid);
+        session_start();
+        if($_SESSION['vcode']==$vcode){
+            return [
+                'status'  =>   1000,
+                'msg'     =>   'success',
+                'data'    =>   []
+            ];
+        }else{
+            return [
+                'status'  =>   10,
+                'msg'     =>   '验证码不正确',
+                'data'    =>   []
+            ];
+        }
+    }
 }

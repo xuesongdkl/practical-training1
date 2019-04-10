@@ -20,35 +20,42 @@ class CheckApiRequest
     {
         //先获取接口的数据，需要先解密
 //        $this->_decrypt($request);
-
         $this->_RsaDecrypt($request);
-        //访问次数限制
-        $num=$this->_checkApiAccessCount();
+        $not_check=[
+            'showvcode'
+        ];
+//        var_dump($request->path());die;
+        $arr=explode('/',$request->path());
+        $route=array_shift($arr);
+        if(!in_array($route,$not_check)){
+            //访问次数限制
+            $num=$this->_checkApiAccessCount();
 
-        if($num['status']==1000){
+            if($num['status']==1000){
 
-            //验证签名
-            $data=$this->_checkClientSign($request);
+                //验证签名
+                $data=$this->_checkClientSign($request);
 //            var_dump($data);die;
-            //把解密的数据传递到控制器
-            $request->request->replace($this->_api_data);
-            //判断签名是否正确
-            if($data['status']==1000){
-                $response=$next($request);
-                //后置操作 对返回的数据进行加密
-                $data=$response->original;
-                $api_response=[];
-                //使用对称加密对数据进行加密处理
+                //把解密的数据传递到控制器
+                $request->request->replace($this->_api_data);
+                //判断签名是否正确
+                if($data['status']==1000){
+                    $response=$next($request);
+                    //后置操作 对返回的数据进行加密
+                    $data=$response->original;
+                    $api_response=[];
+                    //使用对称加密对数据进行加密处理
 //                $api_response['data']=$this->_encrypt($data);
-                $api_response['data']=$this->_RsaEncrypt($data);
-                //生成签名，返回给客户端
-                $api_response['sign']=$this->_createServerSign($data);
-                return response($api_response);
+                    $api_response['data']=$this->_RsaEncrypt($data);
+                    //生成签名，返回给客户端
+                    $api_response['sign']=$this->_createServerSign($data);
+                    return response($api_response);
+                }else{
+                    return response($data);
+                }
             }else{
-                return response($data);
+                return response($num);
             }
-        }else{
-            return response($num);
         }
     }
 
